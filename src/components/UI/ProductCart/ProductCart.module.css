@@ -1,0 +1,236 @@
+.card {
+    --card-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 22px;
+    background-color: #FFFFFF;
+    border-radius: var(--card-radius);
+    border: 1px solid #E3DDCF;
+    box-shadow: 0 1px 2px rgba(21, 19, 15, 0.04), 0 12px 24px -12px rgba(21, 19, 15, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s cubic-bezier(.2, .8, .2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* тонка кольорова лінія зверху, з'являється на hover */
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #FF4C39, #FFB199);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 1px 2px rgba(21, 19, 15, 0.04), 0 24px 40px -16px rgba(21, 19, 15, 0.16);
+    border-color: #D4D1CA;
+}
+
+.card:hover::before {
+    transform: scaleX(1);
+}
+
+.highlighted {
+    border-color: #FF4C39;
+    box-shadow: 0 1px 2px rgba(255, 76, 57, 0.08), 0 16px 32px -14px rgba(255, 76, 57, 0.28);
+}
+
+.highlighted::before {
+    transform: scaleX(1);
+}
+
+.highlighted:hover {
+    border-color: #FF4C39;
+    box-shadow: 0 1px 2px rgba(255, 76, 57, 0.1), 0 26px 44px -16px rgba(255, 76, 57, 0.32);
+}
+
+/* ===== header ===== */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.warranty {
+    padding: 5px 11px;
+    background-color: #E6F5E7;
+    color: #2E9E42;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    border-radius: 100px;
+}
+
+.availability {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #7A756B;
+}
+
+.dot {
+    font-size: 8px;
+    line-height: 1;
+}
+
+.in_stock .dot {
+    color: #2E9E42;
+}
+
+.out_of_stock .dot {
+    color: #C9C4B8;
+}
+
+
+.imagePlaceholder {
+    aspect-ratio: 1 / 1;
+    margin-bottom: 20px;
+    border-radius: 16px;
+    background: radial-gradient(120% 120% at 50% 20%, #FBFAF7 0%, #EFEDE6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+    transition: transform 0.35s ease;
+}
+
+.card:hover .image {
+    transform: scale(1.05);
+}
+
+.imagePlaceholderBase {
+    font-size: 42px;
+    filter: grayscale(1) opacity(0.35);
+    transition: transform 0.35s ease;
+}
+
+.card:hover .imagePlaceholderBase {
+    transform: scale(1.08) rotate(-4deg);
+}
+
+/* ===== main info ===== */
+.mainInfo {
+    margin-bottom: 14px;
+}
+
+.modelTitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17.5px;
+    font-weight: 700;
+    color: #15130F;
+    letter-spacing: -0.01em;
+    margin: 0 0 3px;
+}
+
+.specs {
+    font-size: 12.5px;
+    color: #948E82;
+    margin: 0;
+}
+
+/* ===== status row ===== */
+.statusRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #E3DDCF;
+}
+
+.condition {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 11px;
+    font-size: 11.5px;
+    font-weight: 600;
+    border-radius: 100px;
+    background-color: #F0EFEC;
+    color: #7A756B;
+}
+
+.conditionExcellent {
+    background-color: #E6F5E7;
+    color: #2E9E42;
+}
+
+.conditionGood {
+    background-color: #FDF3D9;
+    color: #C68A00;
+}
+
+.conditionFair {
+    background-color: #FCE8E6;
+    color: #E0452F;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #7A756B;
+    white-space: nowrap;
+}
+
+/* ===== footer ===== */
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 21px;
+    font-weight: 700;
+    color: #15130F;
+    letter-spacing: -0.01em;
+}
+
+.detailsLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #FF4C39;
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
+}
+
+.detailsLink:hover {
+    color: #E0392A;
+    gap: 7px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .card,
+    .card::before,
+    .image,
+    .imagePlaceholderBase,
+    .detailsLink {
+        transition: none;
+    }
+}

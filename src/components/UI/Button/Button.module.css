@@ -1,0 +1,27 @@
+.defaultButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px; 
+    background-color: #15130F;
+    color: #F4F1EA; 
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1.5px solid #15130F;
+    border-radius: 999px; 
+    box-shadow: 3px 3px 0px #FF4C39; 
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+}
+
+.defaultButton:hover {
+    transform: translate(1.5px, 1.5px);
+    box-shadow: 1.5px 1.5px 0px #FF4C39;
+}
+
+.defaultButton:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px transparent;
+}

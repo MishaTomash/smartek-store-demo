@@ -1,0 +1,203 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 6vw;
+    background: rgba(244, 241, 234, 0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 2px solid #15130F;
+    font-family: 'Inter', sans-serif;
+    transition: box-shadow 0.25s ease;
+}
+
+.header.scrolled {
+    box-shadow: 0 6px 0 -3px rgba(21, 19, 15, 0.06);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 19px;
+    font-weight: 700;
+    color: #15130F;
+}
+
+.logoIcon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    object-fit: contain;
+    background-color: #15130F;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.logoText {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+}
+
+.navigation {
+    display: flex;
+    gap: 8px;
+}
+
+.navList {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #7A756B;
+    background-color: transparent;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.navList:hover {
+    color: #15130F;
+    background-color: #FFFFFF;
+    border-color: #15130F;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.socials {
+    display: flex;
+    gap: 8px;
+    padding-right: 14px;
+    border-right: 1.5px solid rgba(21, 19, 15, 0.15);
+}
+
+.socialLink {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    border: 1.5px solid #15130F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #15130F;
+    text-decoration: none;
+    background-color: transparent;
+    box-shadow: 2px 2px 0px #15130F;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.socialLink:hover {
+    background: #15130F;
+    color: #F4F1EA;
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #15130F;
+}
+
+.socialLink:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0px 0px 0px transparent;
+}
+
+.contactBtn {
+    background-color: #FF4C39 !important;
+    color: #F4F1EA !important;
+    border: 1.5px solid #15130F !important;
+    border-radius: 999px !important;
+    box-shadow: 3px 3px 0px #15130F !important;
+    padding: 10px 24px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    white-space: nowrap;
+    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.contactBtn:hover {
+    transform: translate(1.5px, 1.5px);
+    box-shadow: 1.5px 1.5px 0px #15130F !important;
+}
+
+.contactBtn:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px 0px transparent !important;
+}
+
+.burgerBtn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 1.5px solid #15130F;
+    border-radius: 10px;
+    font-size: 20px;
+    color: #15130F;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.mobileMenu {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #F4F1EA;
+    border-bottom: 2px solid #15130F;
+    padding: 20px 6vw 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    z-index: 999;
+}
+
+.mobileNavList {
+    text-align: left;
+    padding: 12px 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #15130F;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E3DDCF;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.mobileSocials {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+}
+
+@media (max-width: 900px) {
+    .navigation {
+        display: none;
+    }
+    .burgerBtn {
+        display: flex;
+    }
+}
+
+@media (max-width: 560px) {
+    .socials {
+        display: none;
+    }
+    .header .contactBtn {
+        display: none;
+    }
+}

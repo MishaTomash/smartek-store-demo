@@ -1,0 +1,1 @@
+export type ModalType = 'warranty' | 'delivery' | 'contact' | 'reviews' | 'availability' | null;

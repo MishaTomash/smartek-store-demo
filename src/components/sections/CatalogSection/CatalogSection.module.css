@@ -1,0 +1,109 @@
+.catalogSection {
+    padding: 90px 0;
+    background-color: #F4F1EA;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 6vw;
+}
+
+.sectionHead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 36px;
+}
+
+.title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(24px, 2.6vw, 32px);
+    font-weight: 700;
+    color: #15130F;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.count {
+    font-size: 13px;
+    color: #948E82;
+    font-weight: 500;
+}
+
+/* ===== filter bar ===== */
+.filterBar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 44px;
+    padding: 6px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3DDCF;
+    border-radius: 100px;
+    box-shadow: 0 1px 2px rgba(21, 19, 15, 0.03), 0 8px 20px -12px rgba(21, 19, 15, 0.08);
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.filterBar::-webkit-scrollbar {
+    display: none;
+}
+
+.filterBtn {
+    padding: 9px 18px;
+    background-color: transparent;
+    border: none;
+    color: #948E82;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    border-radius: 100px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.filterBtn:hover {
+    color: #15130F;
+    background-color: #F4F1EA;
+}
+
+.activeFilter,
+.activeFilter:hover {
+    background-color: #15130F;
+    color: #F4F1EA;
+}
+
+/* ===== grid ===== */
+.productGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+    gap: 22px;
+}
+
+.emptyState {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #948E82;
+    font-size: 14px;
+    padding: 70px 0;
+    border: 1.5px dashed #E3DDCF;
+    border-radius: 20px;
+    background-color: #FFFFFF;
+}
+
+@media (max-width: 640px) {
+    .filterBar {
+        width: 100%;
+    }
+    .productGrid {
+        grid-template-columns: 1fr;
+    }
+    .sectionHead {
+        align-items: flex-start;
+    }
+}

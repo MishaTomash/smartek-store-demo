@@ -1,0 +1,10 @@
+node_modules/
+dist/
+
+.env
+.env.local
+
+.adminjs/
+
+public/uploads/*
+!public/uploads/.gitkeep

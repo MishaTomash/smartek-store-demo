@@ -1,0 +1,122 @@
+.trustSection {
+    padding: 90px 0;
+    background-color: #F4F1EA;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 6vw;
+}
+
+.title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(24px, 2.8vw, 32px);
+    font-weight: 700;
+    color: #15130F;
+    letter-spacing: -0.01em;
+    margin: 0 0 40px;
+}
+
+/* ===== grid ===== */
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.topRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+/* базова картка — і кнопка, і div мають виглядати однаково в стані спокою */
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 16px;
+    background-color: #FFFFFF;
+    border: 1px solid #E3DDCF;
+    border-radius: 20px;
+    font-family: inherit;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+/* клікабельні картки (button) */
+button.card {
+    cursor: pointer;
+}
+
+button.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 30px -18px rgba(21, 19, 15, 0.25);
+    border-color: #E3DDCF;
+}
+
+button.card:active {
+    transform: translateY(-1px);
+}
+
+button.card:hover .iconCircle {
+    background-color: #FF4C39;
+    color: #FFFFFF;
+    transform: scale(1.08);
+}
+
+/* нативна картка (div) — без "кнопкової" анімації, лише легкий hover-акцент */
+div.card {
+    cursor: default;
+}
+
+div.card:hover {
+    border-color: #D4D1CA;
+}
+
+.wideCard {
+    grid-column: span 1;
+}
+
+.iconCircle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #F4F1EA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    color: #15130F;
+    transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+    flex-shrink: 0;
+}
+
+.featureTitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #15130F;
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .topRow {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 560px) {
+    .topRow {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .card {
+        padding: 20px 10px;
+    }
+    .iconCircle {
+        width: 52px;
+        height: 52px;
+        font-size: 20px;
+    }
+}
