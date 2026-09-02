@@ -1,32 +1,73 @@
-# React + TypeScript + Vite
+# TechShop - E-commerce Demo (Fullstack React & Node.js)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **Note:** This repository contains the source code for the public demo version of my production e-commerce project, **[Smartek Store](https://smartekua.store/)**.
+> For security and privacy reasons, the actual branding, logos, and sensitive configuration files have been replaced or removed. The core architecture, features, and logic remain identical to the live production site.
 
-Currently, two official plugins are available:
+## 🚀 Live Production Site
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**[Visit the actual project here: smartekua.store](https://smartekua.store/)**
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** Node.js, Express.js, AdminJS
+- **Database:** MongoDB, Mongoose
 
-## Expanding the Oxlint configuration
+## ✨ Key Features
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **Responsive UI:** Fully adaptive design for mobile devices, including performance optimization for rendering 3D elements.
+- **Modern Navigation:** Product catalog, modal windows, and smooth scrolling.
+- **Admin Dashboard:** Integrated AdminJS panel for managing inventory (products, generations, condition) and processing customer orders.
+- **SEO Optimized:** Configured meta tags, web manifests, and favicons for better search engine visibility.
+- **Architecture:** Modular codebase with a clear separation of concerns (models, routes, controllers).
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+## 💻 How to Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone [https://github.com/MishaTomash/smartek-store-demo.git](https://github.com/MishaTomash/smartek-store-demo.git)
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### 2. Install dependencies
+
+Install dependencies for both frontend and backend:
+
+```bash
+# In the root directory (frontend)
+npm install
+
+# In the server directory (backend)
+cd server
+npm install
+```
+
+### 3. Environment Setup
+
+Create a `.env` file in the `/server` directory based on the provided `.env.example`:
+
+```bash
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+CLIENT_URL=http://localhost:5173
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your_secure_password
+SESSION_SECRET=your_secret_key
+```
+
+### 4. Start the Application
+
+You will need two terminal windows to run the frontend and backend concurrently.
+
+**Terminal 1 (Backend):**
+
+```bash
+cd server
+npm run dev
+```
+
+**Terminal 2 (Frontend):**
+
+```bash
+npm run dev
+```
