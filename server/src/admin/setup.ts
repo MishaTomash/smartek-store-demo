@@ -1,7 +1,9 @@
 import uploadFeature from "@adminjs/upload";
 import path from "path";
 import { fileURLToPath } from "url";
+import crypto from "crypto";
 import AdminJS from "adminjs";
+import MongoStore from "connect-mongo";
 import AdminJSExpress from "@adminjs/express";
 import * as AdminJSMongoose from "@adminjs/mongoose";
 
@@ -149,27 +151,60 @@ export const buildAdminRouter = async (): Promise<AdminBundle> => {
     await admin.watch();
   }
 
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const sessionSecret = process.env.SESSION_SECRET;
+
+  // Без цих змінних адмінка або не пускала б нікого, або підписувала б сесії слабким ключем
+  if (
+    !adminEmail ||
+    !adminPassword ||
+    !sessionSecret ||
+    sessionSecret.length < 32
+  ) {
+    throw new Error(
+      "ADMIN_EMAIL, ADMIN_PASSWORD і SESSION_SECRET (мінімум 32 символи) мають бути задані в .env",
+    );
+  }
+
+  const isProduction = process.env.NODE_ENV === "production";
+
   const adminRouter = AdminJSExpress.buildAuthenticatedRouter(
     admin,
     {
-      authenticate: async (email: string, password: string) => {
-        if (
-          email === process.env.ADMIN_EMAIL &&
-          password === process.env.ADMIN_PASSWORD
-        ) {
-          return { email };
-        }
-        return null;
-      },
-      cookiePassword: process.env.SESSION_SECRET as string,
+      authenticate: async (email: string, password: string) =>
+        safeEqual(email, adminEmail) && safeEqual(password, adminPassword)
+          ? { email }
+          : null,
+      cookiePassword: sessionSecret,
+      cookieName: "admin_session",
     },
     null,
     {
       resave: false,
       saveUninitialized: false,
-      secret: process.env.SESSION_SECRET as string,
+      secret: sessionSecret,
+      // Сесії в MongoDB: переживають перезапуск сервера і не течуть пам'яттю, як MemoryStore
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: "admin_sessions",
+        ttl: 8 * 60 * 60,
+      }),
+      cookie: {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: "lax",
+        maxAge: 8 * 60 * 60 * 1000,
+      },
     },
   );
 
   return { admin, adminRouter };
 };
+
+/** Порівняння рядків за сталий час: тривалість перевірки не підказує, скільки символів збіглося */
+function safeEqual(received: string, expected: string): boolean {
+  const a = crypto.createHash("sha256").update(received).digest();
+  const b = crypto.createHash("sha256").update(expected).digest();
+  return crypto.timingSafeEqual(a, b);
+}

@@ -1,34 +1,41 @@
-import { useState, useEffect } from 'react';
-import { FiX, FiArrowLeft } from 'react-icons/fi';
-import type { Product } from '../../../types/Product';
-import { API_URL } from '../../../config/api';
-import styles from './ProductModal.module.css';
+import { useState, useEffect } from "react";
+import { FiX, FiArrowLeft } from "react-icons/fi";
+import type { Product } from "../../../types/Product";
+import { API_URL } from "../../../config/api";
+import styles from "./ProductModal.module.css";
 
 interface ProductModalProps {
   product: Product | null;
   onClose: () => void;
 }
 export const ProductModal = ({ product, onClose }: ProductModalProps) => {
-  const [view, setView] = useState<'details' | 'checkout' | 'success'>('details');
+  const [view, setView] = useState<"details" | "checkout" | "success">(
+    "details",
+  );
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [formData, setFormData] = useState({
-    name: '', phone: '', city: '', postOffice: ''
+    name: "",
+    phone: "",
+    city: "",
+    postOffice: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (product) {
-      setView('details');
+      setView("details");
       setActiveImageIndex(0);
-      setFormData({ name: '', phone: '', city: '', postOffice: '' });
+      setFormData({ name: "", phone: "", city: "", postOffice: "" });
       setSubmitError(null);
     }
   }, [product]);
 
   useEffect(() => {
-    document.body.style.overflow = product ? 'hidden' : 'auto';
-    return () => { document.body.style.overflow = 'auto'; };
+    document.body.style.overflow = product ? "hidden" : "auto";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
   }, [product]);
   if (!product) return null;
 
@@ -36,7 +43,7 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,8 +53,8 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
 
     try {
       const response = await fetch(`${API_URL}/api/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           productId: product._id,
           customer: formData,
@@ -56,12 +63,17 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => null);
-        throw new Error(errorData?.message || 'Не вдалося оформити замовлення');
+        // Сервер повертає список помилок по полях — показуємо першу, вона конкретніша за загальну
+        throw new Error(
+          errorData?.errors?.[0]?.message ||
+            errorData?.message ||
+            "Не вдалося оформити замовлення",
+        );
       }
 
-      setView('success');
+      setView("success");
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Сталася помилка');
+      setSubmitError(err instanceof Error ? err.message : "Сталася помилка");
     } finally {
       setIsSubmitting(false);
     }
@@ -70,21 +82,24 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
   return (
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-
         <div className={styles.header}>
-          {view === 'checkout' ? (
-            <button className={styles.backBtn} onClick={() => setView('details')}>
+          {view === "checkout" ? (
+            <button
+              className={styles.backBtn}
+              onClick={() => setView("details")}
+            >
               <FiArrowLeft /> Назад
             </button>
           ) : (
             <h3 className={styles.title}>{product.model}</h3>
           )}
-          <button className={styles.closeBtn} onClick={onClose}><FiX /></button>
+          <button className={styles.closeBtn} onClick={onClose}>
+            <FiX />
+          </button>
         </div>
 
         <div className={styles.body}>
-
-          {view === 'details' && (
+          {view === "details" && (
             <div className={styles.detailsView}>
               <div className={styles.gallery}>
                 <div className={styles.mainImage}>
@@ -95,7 +110,9 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
                       className={styles.mainImageImg}
                     />
                   ) : (
-                    <div className={styles.mainImagePlaceholder}>Немає фото</div>
+                    <div className={styles.mainImagePlaceholder}>
+                      Немає фото
+                    </div>
                   )}
                 </div>
 
@@ -107,7 +124,7 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
                         src={url}
                         alt=""
                         onClick={() => setActiveImageIndex(i)}
-                        className={`${styles.thumbnail} ${i === activeImageIndex ? styles.thumbnailActive : ''}`}
+                        className={`${styles.thumbnail} ${i === activeImageIndex ? styles.thumbnailActive : ""}`}
                       />
                     ))}
                   </div>
@@ -116,14 +133,28 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
 
               <div className={styles.info}>
                 <div className={styles.specs}>
-                  <p><span>Пам'ять:</span> {product.storage} ГБ</p>
-                  <p><span>Акумулятор:</span> {product.batteryHealth}%</p>
-                  <p><span>Колір:</span> {product.color}</p>
-                  <p><span>Стан:</span> {product.condition === 'excellent' ? 'Ідеальний' : 'Хороший'}</p>
+                  <p>
+                    <span>Пам'ять:</span> {product.storage} ГБ
+                  </p>
+                  <p>
+                    <span>Акумулятор:</span> {product.batteryHealth}%
+                  </p>
+                  <p>
+                    <span>Колір:</span> {product.color}
+                  </p>
+                  <p>
+                    <span>Стан:</span>{" "}
+                    {product.condition === "excellent"
+                      ? "Ідеальний"
+                      : "Хороший"}
+                  </p>
                 </div>
                 <div className={styles.priceBlock}>
                   <span className={styles.price}>{product.price} ₴</span>
-                  <button className={styles.orderBtn} onClick={() => setView('checkout')}>
+                  <button
+                    className={styles.orderBtn}
+                    onClick={() => setView("checkout")}
+                  >
                     Замовити
                   </button>
                 </div>
@@ -131,7 +162,7 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
             </div>
           )}
 
-          {view === 'checkout' && (
+          {view === "checkout" && (
             <form className={styles.checkoutForm} onSubmit={handleSubmit}>
               <h4 className={styles.formTitle}>Оформлення замовлення</h4>
               <div className={styles.orderSummary}>
@@ -141,36 +172,69 @@ export const ProductModal = ({ product, onClose }: ProductModalProps) => {
 
               <div className={styles.inputGroup}>
                 <label>ПІБ</label>
-                <input required type="text" name="name" placeholder="Іванов Іван Іванович" value={formData.name} onChange={handleInputChange} />
+                <input
+                  required
+                  type="text"
+                  name="name"
+                  placeholder="Іванов Іван Іванович"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className={styles.inputGroup}>
                 <label>Номер телефону</label>
-                <input required type="tel" name="phone" placeholder="+380" value={formData.phone} onChange={handleInputChange} />
+                <input
+                  required
+                  type="tel"
+                  name="phone"
+                  placeholder="+380"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className={styles.inputGroup}>
                 <label>Місто</label>
-                <input required type="text" name="city" placeholder="Київ" value={formData.city} onChange={handleInputChange} />
+                <input
+                  required
+                  type="text"
+                  name="city"
+                  placeholder="Київ"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className={styles.inputGroup}>
                 <label>Відділення Нової Пошти</label>
-                <input required type="text" name="postOffice" placeholder="Відділення №1" value={formData.postOffice} onChange={handleInputChange} />
+                <input
+                  required
+                  type="text"
+                  name="postOffice"
+                  placeholder="Відділення №1"
+                  value={formData.postOffice}
+                  onChange={handleInputChange}
+                />
               </div>
 
-              {submitError && <p style={{ color: 'red' }}>{submitError}</p>}
+              {submitError && <p style={{ color: "red" }}>{submitError}</p>}
 
-              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-                {isSubmitting ? 'Відправка...' : 'Відправити замовлення'}
+              <button
+                type="submit"
+                className={styles.submitBtn}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Відправка..." : "Відправити замовлення"}
               </button>
             </form>
           )}
 
-          {view === 'success' && (
+          {view === "success" && (
             <div className={styles.detailsView}>
               <p>Дякуємо! Ваше замовлення прийнято, скоро з вами зв'яжуться.</p>
-              <button className={styles.submitBtn} onClick={onClose}>Закрити</button>
+              <button className={styles.submitBtn} onClick={onClose}>
+                Закрити
+              </button>
             </div>
           )}
-
         </div>
       </div>
     </div>
