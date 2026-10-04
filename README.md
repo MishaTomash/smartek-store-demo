@@ -1,73 +1,104 @@
-# TechShop - E-commerce Demo (Fullstack React & Node.js)
+# 📱 Smartek Store — демо
 
-> **Note:** This repository contains the source code for the public demo version of my production e-commerce project, **[Smartek Store](https://smartekua.store/)**.
-> For security and privacy reasons, the actual branding, logos, and sensitive configuration files have been replaced or removed. The core architecture, features, and logic remain identical to the live production site.
+Інтернет-магазин вживаних iPhone, який я розробив і запустив на замовлення клієнта. Покупець переглядає каталог з фільтром за поколінням, відкриває картку з фото, станом і ємністю акумулятора та оформлює замовлення з доставкою Новою Поштою, а менеджер обробляє замовлення й веде каталог в адмін-панелі.
 
-## 🚀 Live Production Site
+**Живий сайт: [smartekua.store](https://www.smartekua.store)**
 
-**[Visit the actual project here: smartekua.store](https://smartekua.store/)**
+Це публічна версія коду магазину: у ній прибрано конфігурацію сервера й workflow деплою, а назву в інтерфейсі адмінки замінено на TechShop. Логіка каталогу, замовлень і адмін-панелі така сама, як на живому сайті.
 
-## 🛠 Tech Stack
+React · TypeScript · Three.js · Express · MongoDB · AdminJS
 
-- **Frontend:** React, TypeScript, Vite
-- **Backend:** Node.js, Express.js, AdminJS
-- **Database:** MongoDB, Mongoose
+---
 
-## ✨ Key Features
+## Що вміє магазин
 
-- **Responsive UI:** Fully adaptive design for mobile devices, including performance optimization for rendering 3D elements.
-- **Modern Navigation:** Product catalog, modal windows, and smooth scrolling.
-- **Admin Dashboard:** Integrated AdminJS panel for managing inventory (products, generations, condition) and processing customer orders.
-- **SEO Optimized:** Configured meta tags, web manifests, and favicons for better search engine visibility.
-- **Architecture:** Modular codebase with a clear separation of concerns (models, routes, controllers).
+**Каталог.** Товари завантажуються з API з фільтром за поколінням iPhone від SE до 16. Картка товару показує фото, пам'ять, колір, стан, ємність акумулятора і ціну.
 
-## 💻 How to Run Locally
+**3D-модель на головній.** Модель iPhone 15 Pro у форматі GLB рендериться через React Three Fiber і обертається автоматично; користувач може покрутити її сам.
 
-### 1. Clone the repository
+**Оформлення замовлення.** Покупець вказує ім'я, телефон, місто й відділення Нової Пошти прямо в картці товару, без реєстрації.
+
+**Адмін-панель.** AdminJS на `/admin` з входом за логіном і паролем: менеджер додає товари з кількома фото, змінює наявність і веде замовлення за статусами від нового до виконаного.
+
+## Технічні рішення
+
+### Ціна в замовленні не змінюється заднім числом
+
+Замовлення зберігає не лише посилання на товар, а й копію моделі й ціни на момент покупки (`productSnapshot`). Якщо менеджер потім змінить ціну або видалить товар, історія замовлень і суми в ній лишаться правильними.
+
+### Валідація замовлення на сервері
+
+Маршрут створення замовлення публічний, тому тіло запиту перевіряється схемою Zod у `server/src/validation/order.schema.ts`: тип і довжина кожного поля, коректний ідентифікатор товару. Телефон у будь-якому записі, як-от `067 123-45-67` чи `+38 (067) 1234567`, нормалізується до `+380671234567`, тож менеджер бачить номери в одному форматі. Помилки повертаються по полях українською, а форма показує першу з них.
+
+### Захист від спаму й перебору пароля
+
+Створення замовлень обмежене п'ятьма запитами з однієї IP за 15 хвилин, щоб скрипт не завалив адмінку фейковими замовленнями. Вхід в адмінку обмежений десятьма невдалими спробами за 15 хвилин, а логін і пароль порівнюються за сталий час. Сесії адмінки зберігаються в MongoDB через `connect-mongo`, тому переживають перезапуск сервера, а cookie на продакшені передається лише через HTTPS.
+
+### Фільтр без ін'єкції операторів MongoDB
+
+Express розбирає запит `?generation[$ne]=x` в об'єкт `{ $ne: "x" }`, який без перевірки потрапив би у фільтр бази як оператор. API приймає лише значення зі списку поколінь, а все інше ігнорує.
+
+### Деплой
+
+У продакшен-версії після пушу в `main` GitHub Actions деплоїть проєкт на VPS через SSH, а бекенд працює під PM2. У демо цей workflow прибрано, бо він прив'язаний до продакшен-сервера.
+
+## Стек
+
+| Частина        | Технології                                                               |
+| -------------- | ------------------------------------------------------------------------ |
+| Фронтенд       | React, TypeScript, Vite, CSS Modules, Three.js (React Three Fiber, drei) |
+| Бекенд         | Node.js, Express, TypeScript, Zod, express-rate-limit                    |
+| Дані           | MongoDB, Mongoose, connect-mongo                                         |
+| Адмін-панель   | AdminJS з завантаженням фото                                             |
+| Інфраструктура | VPS, PM2, GitHub Actions                                                 |
+
+## Локальний запуск
 
 ```bash
-git clone [https://github.com/MishaTomash/smartek-store-demo.git](https://github.com/MishaTomash/smartek-store-demo.git)
-```
+git clone https://github.com/MishaTomash/smartek-store-demo.git
+cd smartek-store-demo
 
-### 2. Install dependencies
-
-Install dependencies for both frontend and backend:
-
-```bash
-# In the root directory (frontend)
 npm install
-
-# In the server directory (backend)
 cd server
 npm install
+cp .env.example .env    # MONGO_URI, ADMIN_EMAIL, ADMIN_PASSWORD, SESSION_SECRET
 ```
 
-### 3. Environment Setup
-
-Create a `.env` file in the `/server` directory based on the provided `.env.example`:
+`SESSION_SECRET` має містити щонайменше 32 символи, інакше сервер не запуститься. Згенерувати його можна так:
 
 ```bash
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-CLIENT_URL=http://localhost:5173
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=your_secure_password
-SESSION_SECRET=your_secret_key
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### 4. Start the Application
-
-You will need two terminal windows to run the frontend and backend concurrently.
-
-**Terminal 1 (Backend):**
+Потім запусти бекенд і фронтенд у двох терміналах:
 
 ```bash
-cd server
-npm run dev
+cd server && npm run dev   # API і адмінка: http://localhost:5000, http://localhost:5000/admin
+npm run dev                # магазин: http://localhost:5173
 ```
 
-**Terminal 2 (Frontend):**
+## Структура
 
-```bash
-npm run dev
 ```
+smartek-store-demo/
+├── public/                   3D-модель, маніфест
+├── src/                      фронтенд
+│   ├── components/
+│   │   ├── 3D/               модель iPhone
+│   │   ├── sections/         Hero, каталог, блок довіри
+│   │   └── UI/               картка товару, оформлення, модалки, кнопки
+│   ├── config/               адреса API
+│   └── types/
+└── server/
+    └── src/
+        ├── admin/            налаштування AdminJS і авторизації
+        ├── models/           Product, Order
+        ├── routes/           API товарів і замовлень
+        ├── validation/       Zod-схема замовлення
+        ├── middlewares/      rate limit
+        └── config/           підключення до MongoDB
+```
+
+## Ліцензія
+
+Код відкритий для перегляду в портфоліо. Копіювання, модифікація та комерційне використання без письмового дозволу автора заборонені, див. [LICENSE](LICENSE).
